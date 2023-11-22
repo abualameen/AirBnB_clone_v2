@@ -5,14 +5,15 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 import os
 
+if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+    class City(BaseModel, Base):
+        """ The city class, contains state ID and name """
 
-class City(BaseModel, Base):
-    """ The city class, contains state ID and name """
-    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = 'cities'
         name = Column(String(128), nullable=False)
         state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
-        #places = relationship('Place', backref='city', cascade='all, delete-orphan')
-    else:
+        places = relationship('Place', backref='city', cascade='all, delete-orphan')
+else:
+    class City(BaseModel):
         state_id = ""
         name = ""
