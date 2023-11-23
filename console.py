@@ -119,10 +119,30 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         args = args.split()
-
         if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
+        if args[0] == 'State' or args[0] == 'Place' or args[0] == 'City' or args[0] == 'Amenity':
+            obj_name = None
+            for param in args:
+                param_parts = param.split('=')
+                if len(param_parts) == 2 and param_parts[0] == 'name':
+                    obj_name = param_parts[1].strip('"')
+                    break
+            if obj_name is None:
+                print(f"** missing 'name' attribute for class '{args[0]}' **")
+                return
+
+            # Check if an object with the same name already exists for the given class
+            existing_objects = storage.all(HBNBCommand.classes[args[0]]).values()
+            for obj in existing_objects:
+               
+                if hasattr(obj, 'name') and obj.name == obj_name:
+                    print(f"** object with the same name '{obj_name}' already exists for class '{args[0]}' **")
+                    return
+
+        #new_instance = HBNBCommand.classes[args[0]]()
+
         params = {}
         new_instance = HBNBCommand.classes[args[0]]()
         for param in args[1:]:
@@ -145,7 +165,17 @@ class HBNBCommand(cmd.Cmd):
                         continue
                 params[key] = value
                 setattr(new_instance, key, value)
-        
+        if args[0] == 'User':
+            if 'email' not in params or 'password' not in params:
+                print("** email and password are required for User creation **")
+                return
+            existing_users = storage.all(User).values()
+            for user in existing_users:
+                if hasattr(user, 'email') and user.email == params.get('email'):
+                    print(f"** User with the same email '{params['email']}' already exists **")
+                    return
+
+
         storage.new(new_instance)
         storage.save()
         output = new_instance.id
