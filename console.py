@@ -122,7 +122,8 @@ class HBNBCommand(cmd.Cmd):
         if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        if args[0] == 'State' or args[0] == 'Place' or args[0] == 'City' or args[0] == 'Amenity':
+        if args[0] == 'State' or args[0] == 'Place' or\
+                args[0] == 'City' or args[0] == 'Amenity':
             obj_name = None
             for param in args:
                 param_parts = param.split('=')
@@ -133,16 +134,15 @@ class HBNBCommand(cmd.Cmd):
                 print(f"** missing 'name' attribute for class '{args[0]}' **")
                 return
 
-            # Check if an object with the same name already exists for the given class
-            existing_objects = storage.all(HBNBCommand.classes[args[0]]).values()
+            # Check if an object with the same
+            # name already exists for the given class
+            existing_objects = storage.all(
+                    HBNBCommand.classes[args[0]]).values()
             for obj in existing_objects:
-               
                 if hasattr(obj, 'name') and obj.name == obj_name:
-                    print(f"** object with the same name '{obj_name}' already exists for class '{args[0]}' **")
+                    print(f"** object with the same name '{obj_name}'\
+                        already exists for class '{args[0]}' **")
                     return
-
-        #new_instance = HBNBCommand.classes[args[0]]()
-
         params = {}
         new_instance = HBNBCommand.classes[args[0]]()
         for param in args[1:]:
@@ -167,20 +167,22 @@ class HBNBCommand(cmd.Cmd):
                 setattr(new_instance, key, value)
         if args[0] == 'User':
             if 'email' not in params or 'password' not in params:
-                print("** email and password are required for User creation **")
+                print(
+                    "** email and password are required for User creation **"
+                    )
                 return
             existing_users = storage.all(User).values()
             for user in existing_users:
-                if hasattr(user, 'email') and user.email == params.get('email'):
-                    print(f"** User with the same email '{params['email']}' already exists **")
+                if hasattr(user, 'email') and\
+                        user.email == params.get('email'):
+                    print(f"** User with the same email '{params['email']}'\
+                        already exists **")
                     return
-
-
         storage.new(new_instance)
         storage.save()
         output = new_instance.id
         print(output)
-        #return output
+
     def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type")
@@ -341,7 +343,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] =='\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -352,7 +354,7 @@ class HBNBCommand(cmd.Cmd):
             if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0]  =='\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
@@ -388,6 +390,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
