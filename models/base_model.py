@@ -45,12 +45,20 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             # storage.new(self)
+    import os
 
-
-    def __str__(self):
-        """Returns a string representation of the instance"""
-        cls = (str(type(self)).split('.')[-1]).split('\'')[0]
-        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        def __str__(self):
+            """String representation of the State instance"""
+            cls = (str(type(self)).split('.')[-1]).split('\'')[0]
+            state_dic = self.__dict__
+            state_dic.pop('_sa_instance_state', None)
+            return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+    else:
+        def __str__(self):
+            """Returns a string representation of the instance"""
+            cls = (str(type(self)).split('.')[-1]).split('\'')[0]
+            return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
@@ -58,15 +66,13 @@ class BaseModel:
         self.updated_at = datetime.now()
         storage.new(self)
         storage.save()
-
     def to_dict(self):
         """Convert instance into dict format"""
+
         dictionary = {}
         dictionary.update(self.__dict__)
-        if '_sa_instance_state' in dictionary:
-            dictionary.pop('_sa_instance_state', None)
         dictionary.update({'__class__':
-                          (str(type(self)).split('.')[-1]).split('\'')[0]})
+                        (str(type(self)).split('.')[-1]).split('\'')[0]})
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
         return dictionary
