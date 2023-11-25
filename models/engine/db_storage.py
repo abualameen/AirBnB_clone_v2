@@ -16,11 +16,13 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+
 class DBStorage:
     """ this class handles interaction with mysql data base """
     __engine = None
     __session = None
     __objects = {}
+
     def __init__(self):
         """ initialize the DBStoragae instances """
         db_user = os.environ.get('HBNB_MYSQL_USER')
@@ -28,15 +30,17 @@ class DBStorage:
         db_host = os.environ.get('HBNB_MYSQL_HOST')
         db_name = os.environ.get('HBNB_MYSQL_DB')
 
-        self.__engine = create_engine(f'mysql+mysqldb://{db_user}:{db_password}@{db_host}/{db_name}', pool_pre_ping=True)
-        self.__session = scoped_session(sessionmaker(bind=self.__engine, expire_on_commit=False))
+        self.__engine = create_engine(
+                                        f'mysql+mysqldb://{db_user}:{db_password}\
+                                        @{db_host}/{db_name}',
+                                        pool_pre_ping=True)
+        self.__session = scoped_session(sessionmaker(bind=self.__engine,
+                                        expire_on_commit=False))
         if os.environ.get('HBNB_ENV') == 'test':
             Base.metatdata.drop_all(self.__engine)
 
-
     def all(self, cls=None):
         """ Query on the current database session """
-        #from models import User, State, City, Amenity, Place, Review
         from models.user import User
         from models.place import Place
         from models.state import State
@@ -57,11 +61,11 @@ class DBStorage:
                     for obj in query_result:
                         key = f"{type(obj).__name__}.{obj.id}"
                         obj_dict = obj.to_dict()
-                        objects[key] = f"[{type(obj).__name__}] ({obj.id}) {obj_dict}"
+                        objects[key] = f"[{type(obj).__name__}]\
+                                        ({obj.id}) {obj_dict}"
                 except Exception as e:
                     print(f"Error querying {cls}: {e}")
         return objects
-
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -86,12 +90,10 @@ class DBStorage:
         from models.review import Review
         from models.amenity import Amenity
 
-
         classes = {
                     State, City, User, Place, Review, Amenity
 
                   }
-        # try:
         Base.metadata.create_all(self.__engine)
         self.__session.remove()
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
@@ -102,7 +104,6 @@ class DBStorage:
             for obj in query_result:
                 key = f"{type(obj).__name__}.{obj.id}"
                 self.__objects[key] = obj
-
 
     def delete(self, obj=None):
         """ this methed delets object of a given class """

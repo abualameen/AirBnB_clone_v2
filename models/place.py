@@ -2,19 +2,30 @@
 """ Place Module for HBNB project """
 from models.base_model import BaseModel
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Float, Table
+from sqlalchemy import Column, Integer, String
+from sqlalchemy import DateTime, ForeignKey, Float, Table
 from sqlalchemy.orm import relationship
 import os
+
 
 if os.getenv('HBNB_TYPE_STORAGE') == 'db':
     class Place(BaseModel, Base):
         """ A place to stay """
-        
         __tablename__ = 'places'
-        place_amenity = Table("place_amenity", Base.metadata,
-            Column("place_id", String(60), ForeignKey("places.id"), primary_key=True,nullable=False),
-            Column("amenity_id", String(60), ForeignKey("amenities.id"), primary_key=True, nullable=False))
-        amenities = relationship("Amenity", secondary=place_amenity, back_populates="place_amenities", viewonly=False)
+        place_amenity = Table(
+                                "place_amenity", Base.metadata,
+                                Column(
+                                        "place_id", String(60),
+                                        ForeignKey("places.id"),
+                                        primary_key=True, nullable=False),
+                                Column(
+                                        "amenity_id", String(60),
+                                        ForeignKey("amenities.id"),
+                                        primary_key=True, nullable=False))
+        amenities = relationship(
+                                    "Amenity", secondary=place_amenity,
+                                    back_populates="place_amenities",
+                                    viewonly=False)
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         name = Column(String(128), nullable=False)
@@ -25,7 +36,9 @@ if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
-        reviews = relationship('Review', backref='place', cascade='all, delete-orphan')
+        reviews = relationship(
+                                'Review', backref='place',
+                                cascade='all, delete-orphan')
 
 else:
     class Place(BaseModel):
@@ -68,6 +81,7 @@ else:
         def amenities(self, amenity):
             """ Setter attribute amenities that handles append method
             for adding an Amenity.id to the attribute amenity_ids.
-            This method should accept only Amenity object, otherwise, do nothing. """
+            This method should accept only Amenity
+            object, otherwise, do nothing. """
             if isinstance(amenity, Amenity):
                 self.amenity_ids.append(amenity.id)

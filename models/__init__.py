@@ -11,7 +11,10 @@ from models.review import Review
 from models.base_model import BaseModel
 
 
-__all__ = ['State', 'City', 'User', 'Place', 'Amenity', 'Review', 'BaseModel', 'storage']
+__all__ = [
+            'State', 'City', 'User', 'Place',
+            'Amenity', 'Review', 'BaseModel', 'storage'
+        ]
 
 import os
 
@@ -24,6 +27,3 @@ else:
     from models.engine.file_storage import FileStorage
     storage = FileStorage()
     storage.reload()
-    
-
-
