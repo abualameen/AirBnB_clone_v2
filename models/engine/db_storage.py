@@ -37,7 +37,7 @@ class DBStorage:
         self.__session = scoped_session(sessionmaker(bind=self.__engine,
                                         expire_on_commit=False))
         if os.environ.get('HBNB_ENV') == 'test':
-            Base.metatdata.drop_all(self.__engine)
+            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """ Query on the current database session """

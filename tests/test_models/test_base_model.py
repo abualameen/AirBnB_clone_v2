@@ -4,6 +4,7 @@ from models.base_model import BaseModel
 import unittest
 import datetime
 from uuid import UUID
+from console import HBNBCommand
 import json
 import os
 
@@ -75,10 +76,9 @@ class test_basemodel(unittest.TestCase):
             new = self.value(**n)
 
     def test_kwargs_one(self):
-        """ """
-        n = {'Name': 'test'}
-        with self.assertRaises(KeyError):
-            new = self.value(**n)
+        """ Test passing one unexpected kwargs """
+        with self.assertRaises(TypeError):
+            HBNBCommand(**{"Name": "John", "age": 25})
 
     def test_id(self):
         """ """
@@ -97,7 +97,3 @@ class test_basemodel(unittest.TestCase):
         n = new.to_dict()
         new = BaseModel(**n)
         self.assertFalse(new.created_at == new.updated_at)
-
-
-if __name__ == '__main__':
-    unittest.main()
