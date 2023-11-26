@@ -31,9 +31,8 @@ class DBStorage:
         db_name = os.environ.get('HBNB_MYSQL_DB')
 
         self.__engine = create_engine(
-                                        f'mysql+mysqldb://{db_user}:{db_password}\
-                                        @{db_host}/{db_name}',
-                                        pool_pre_ping=True)
+            f'mysql+mysqldb://{db_user}:{db_password}@{db_host}/{db_name}',
+            pool_pre_ping=True)
         self.__session = scoped_session(sessionmaker(bind=self.__engine,
                                         expire_on_commit=False))
         if os.environ.get('HBNB_ENV') == 'test':
