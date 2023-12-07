@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# This script transfers a file to a server using scp
+
+FILE_PATH="$1"
+SERVER_IP="$2"
+SSH_USERNAME="$3"
+SSH_KEY_PATH="$4"
+
+
+if [ $# -lt 4 ]; then
+    echo "Usage: $0 PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
+    exit 1
+fi
+
+export SCP_OPTS="-o StrictHostKeyChecking=no"
+scp -i "$SSH_KEY_PATH" $SCP_OPTS "$FILE_PATH" "$SSH_USERNAME@$SERVER_IP":~/
