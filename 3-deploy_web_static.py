@@ -6,7 +6,6 @@ Fabric script that creates and distributes an archive to web servers.
 from fabric.api import run, put, env, local
 from os.path import exists
 from datetime import datetime
-from fabric.context_managers import cd
 
 
 env.hosts = ['35.153.33.61', '54.165.26.200']
@@ -38,7 +37,8 @@ def do_deploy(archive_path):
         archive_path (str): Path to the archive to deploy.
 
     Returns:
-        bool: True if all operations have been done correctly, otherwise, False.
+        bool: True if all operations have been done
+        correctly, otherwise, False.
     """
     if not exists(archive_path):
         return False
@@ -47,10 +47,12 @@ def do_deploy(archive_path):
         # Upload the archive to the /tmp/ directory of the web server
         put(archive_path, "/tmp/")
 
-        # Extract the archive to the folder /data/web_static/releases/<archive filename without extension>
+        # Extract the archive to the folder /data/web_static/
+        #  releases/<archive filename without extension>
         archive_filename = archive_path.split("/")[-1]
         archive_no_extension = archive_filename.split(".")[0]
-        release_path = "/data/web_static/releases/{}".format(archive_no_extension)
+        release_path = "/data/web_static/releases/{}".format(
+                        archive_no_extension)
         run("mkdir -p {}".format(release_path))
         run("tar -xzf /tmp/{} -C {}".format(archive_filename, release_path))
 
@@ -91,4 +93,3 @@ def deploy():
 
 if __name__ == "__main__":
     deploy()
-
