@@ -20,7 +20,8 @@ def do_deploy(archive_path):
         archive_path (str): Path to the archive to deploy.
 
     Returns:
-        bool: True if all operations have been done correctly, otherwise, False.
+        bool: True if all operations have been done
+        correctly, otherwise, False.
     """
     if not exists(archive_path):
         return False
@@ -29,10 +30,12 @@ def do_deploy(archive_path):
         # Upload the archive to the /tmp/ directory of the web server
         put(archive_path, "/tmp/")
 
-        # Extract the archive to the folder /data/web_static/releases/<archive filename without extension>
+        # Extract the archive to the folder /data/web_static
+        # /releases/<archive filename without extension>
         archive_filename = archive_path.split("/")[-1]
         archive_no_extension = archive_filename.split(".")[0]
-        release_path = "/data/web_static/releases/{}".format(archive_no_extension)
+        release_path = "/data/web_static/releases/{}".format(
+                        archive_no_extension)
         run("mkdir -p {}".format(release_path))
         run("tar -xzf /tmp/{} -C {}".format(archive_filename, release_path))
 
@@ -61,7 +64,8 @@ def do_deploy(archive_path):
 
 if __name__ == "__main__":
     current_time = datetime.utcnow()
-    archive_name = "web_static_{}.tgz".format(current_time.strftime("%Y%m%d%H%M%S"))
+    archive_name = "web_static_{}.tgz".format(
+                    current_time.strftime("%Y%m%d%H%M%S"))
     archive_path = "versions/{}".format(archive_name)
     result = do_deploy(archive_path)
     print(result)
