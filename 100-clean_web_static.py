@@ -8,7 +8,7 @@ from fabric.context_managers import cd
 from fabric.operations import sudo
 
 
-env.hosts = ['<IP web-01>', '<IP web-02>']
+env.hosts = ['35.153.33.61', '54.165.26.200']
 env.user = 'ubuntu'  # Update with your username
 env.key_filename = '~/.ssh/id_rsa'  # Update with your private key path
 
