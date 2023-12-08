@@ -3,12 +3,10 @@
 Fabric script that deletes out-of-date archives.
 """
 
-from fabric.api import env, local
+from fabric.api import env, run, local
 from fabric.context_managers import cd
-from fabric.operations import sudo
 
-
-env.hosts = ['35.153.33.61', '54.165.26.200']
+env.hosts = ['<IP web-01>', '<IP web-02>']
 env.user = 'ubuntu'  # Update with your username
 env.key_filename = '~/.ssh/id_rsa'  # Update with your private key path
 
@@ -31,11 +29,13 @@ def do_clean(number=0):
         number += 1
 
     # Delete unnecessary archives in the versions folder
-    with cd("/data/web_static/releases"):
-        local("ls -1t versions | tail -n +{} | xargs -I {{}} rm versions/{{}}\
-                > /dev/null 2>&1".format(number))
+    local("ls -1t versions | tail -n +{} | xargs -I {{}} rm\
+            versions/{{}} > /dev/null 2>&1".format(number))
 
     # Delete unnecessary archives in the /data/web_static/releases folder
     with cd("/data/web_static/releases"):
-        sudo("ls -1t | tail -n +{} | xargs -I {{}} rm -rf {{}} >\
+        run("ls -1t | tail -n +{} | xargs -I {{}} rm -rf {{}} >\
                 /dev/null 2>&1".format(number))
+
+    # Remove the "total" line from the local ls output
+    local("ls -ltr versions | tail -n +2")
