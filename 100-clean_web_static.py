@@ -32,9 +32,10 @@ def do_clean(number=0):
 
     # Delete unnecessary archives in the versions folder
     with cd("/data/web_static/releases"):
-        local("ls -1t versions | tail -n +{} | xargs -I {{}}\
-                rm versions/{{}}".format(number))
+        local("ls -1t versions | tail -n +{} | xargs -I {{}} rm versions/{{}}\
+                > /dev/null 2>&1".format(number))
 
     # Delete unnecessary archives in the /data/web_static/releases folder
     with cd("/data/web_static/releases"):
-        sudo("ls -1t | tail -n +{} | xargs -I {{}} rm -rf {{}}".format(number))
+        sudo("ls -1t | tail -n +{} | xargs -I {{}} rm -rf {{}} >\
+                /dev/null 2>&1".format(number))
