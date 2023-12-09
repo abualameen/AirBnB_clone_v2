@@ -10,6 +10,7 @@ file { '/data':
   ensure => 'directory',
   owner  => 'ubuntu',
   group  => 'ubuntu',
+  mode   => '0755',
 }
 
 file { '/data/web_static':
