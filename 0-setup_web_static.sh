@@ -31,3 +31,5 @@ sudo sed -i "s#server_name $hostname;#$placement#" /etc/nginx/sites-available/de
 
 # Restart Nginx
 sudo service nginx restart
+
+exit 0
