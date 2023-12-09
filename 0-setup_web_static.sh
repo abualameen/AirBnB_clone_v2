@@ -18,7 +18,7 @@ echo -e "<html>\n\t<head>\n\t</head>\n\t<body>\n\t\tHolberton School\n\t</body>\
 
 # Create or recreate symbolic link
 sudo rm -f /data/web_static/current
-sudo ln -s /data/web_static/releases/test/ /data/web_static/current
+sudo ln -s /data/web_static/releases/test /data/web_static/current
 
 # Give ownership of /data/ folder to the ubuntu user and group recursively
 sudo chown -R ubuntu:ubuntu /data/
