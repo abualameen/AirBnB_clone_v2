@@ -23,7 +23,8 @@ sudo ln -s /data/web_static/releases/test /data/web_static/current
 # Give ownership of /data/ folder to the ubuntu user and group recursively
 sudo chown -R ubuntu:ubuntu /data/
 placement="server_name $hostname;\n\tlocation \/hbnb_static\/ {\n\t\talias \/data\/web_static\/current\/;\n\t}"
-sudo sed -i "s|server_name $hostname;|$placement|" /etc/nginx/sites-available/default
+sudo sed -i "s#server_name $hostname;#$placement#" /etc/nginx/sites-available/default
+
 
 
 
