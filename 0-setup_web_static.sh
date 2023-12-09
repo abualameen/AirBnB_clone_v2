@@ -5,6 +5,8 @@
 apt-get -y update
 apt-get -y install nginx
 
+
+hostname=$(hostname)
 # Create necessary folders
 mkdir -p /data/web_static/releases/test/
 mkdir -p /data/web_static/shared/
@@ -23,7 +25,7 @@ chown -R ubuntu:ubuntu /data/
 
 # Update Nginx configuration
 config="location /hbnb_static {\n\talias /data/web_static/current/;\n}\n"
-sed -i "s#server_name _;#$config#" /etc/nginx/sites-available/default
+sed -i "s#server_name $hostname;#$config#" /etc/nginx/sites-available/default
 
 # Restart Nginx
 service nginx restart
