@@ -10,6 +10,7 @@ file { '/data':
   ensure => 'directory',
   owner  => 'ubuntu',
   group  => 'ubuntu',
+  mode   => '0755',
 }
 
 file { '/data/web_static':
@@ -23,12 +24,14 @@ file { '/data/web_static/releases':
   ensure => 'directory',
   owner  => 'ubuntu',
   group  => 'ubuntu',
+  mode   => '0755',
 }
 
 file { '/data/web_static/releases/test':
   ensure => 'directory',
   owner  => 'ubuntu',
   group  => 'ubuntu',
+  mode   => '0755',
 }
 
 # Create a fake HTML file for testing
@@ -36,6 +39,7 @@ file { '/data/web_static/releases/test/index.html':
   content => '<html>\n\t<head>\n\t</head>\n\t<body>\n\t\tHolberton School\n\t</body>\n</html>',
   owner   => 'ubuntu',
   group   => 'ubuntu',
+  mode   => '0644',
 }
 
 # Create symbolic link
