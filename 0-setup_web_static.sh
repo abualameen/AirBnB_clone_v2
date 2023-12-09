@@ -8,7 +8,11 @@ if ! command -v nginx &> /dev/null; then
 fi
 hostname=$(hostname)
 
+# Remove existing web_static directories with timestamps
+sudo rm -rf /data/web_static/releases/web_static_*
+
 # Create necessary folders if they don't exist
+sudo rm -rf /data/web_static/releases/test/
 sudo mkdir -p /data/web_static/releases/test/
 sudo mkdir -p /data/web_static/shared/
 sudo touch /data/web_static/releases/test/index.html
@@ -24,9 +28,6 @@ sudo ln -s /data/web_static/releases/test /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
 placement="server_name $hostname;\n\tlocation \/hbnb_static\/ {\n\t\talias \/data\/web_static\/current\/;\n\t}"
 sudo sed -i "s#server_name $hostname;#$placement#" /etc/nginx/sites-available/default
-
-
-
 
 # Restart Nginx
 sudo service nginx restart
