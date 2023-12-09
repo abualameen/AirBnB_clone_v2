@@ -11,6 +11,7 @@ env.hosts = ['35.153.33.61', '54.165.26.200']
 env.user = 'ubuntu'  # Update with your username
 env.key_filename = '~/.ssh/id_rsa'  # Update with your private key path
 
+
 @task
 def do_deploy(archive_path):
     """
@@ -60,6 +61,7 @@ def do_deploy(archive_path):
     except Exception as e:
         print(e)
         return False
+
 
 # Run the deployment if the script is executed directly
 if __name__ == "__main__":
