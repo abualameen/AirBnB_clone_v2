@@ -1,12 +1,30 @@
-# Puppet manifest to set up web servers for deployment of web_static
+# 101-setup_web_static.pp
 
-# Install Nginx
-class { 'nginx':
+# Install Nginx package
+package { 'nginx':
   ensure => 'installed',
 }
 
-# Create necessary folders
-file { ['/data/', '/data/web_static/', '/data/web_static/releases/', '/data/web_static/shared/']:
+# Create necessary directories
+file { '/data':
+  ensure => 'directory',
+  owner  => 'ubuntu',
+  group  => 'ubuntu',
+}
+
+file { '/data/web_static':
+  ensure => 'directory',
+  owner  => 'ubuntu',
+  group  => 'ubuntu',
+}
+
+file { '/data/web_static/releases':
+  ensure => 'directory',
+  owner  => 'ubuntu',
+  group  => 'ubuntu',
+}
+
+file { '/data/web_static/releases/test':
   ensure => 'directory',
   owner  => 'ubuntu',
   group  => 'ubuntu',
@@ -14,7 +32,6 @@ file { ['/data/', '/data/web_static/', '/data/web_static/releases/', '/data/web_
 
 # Create a fake HTML file for testing
 file { '/data/web_static/releases/test/index.html':
-  ensure  => 'file',
   content => '<html>\n\t<head>\n\t</head>\n\t<body>\n\t\tHolberton School\n\t</body>\n</html>',
   owner   => 'ubuntu',
   group   => 'ubuntu',
@@ -22,23 +39,23 @@ file { '/data/web_static/releases/test/index.html':
 
 # Create symbolic link
 file { '/data/web_static/current':
-  ensure  => 'link',
-  target  => '/data/web_static/releases/test/',
-  owner   => 'ubuntu',
-  group   => 'ubuntu',
+  ensure => 'link',
+  target => '/data/web_static/releases/test/',
+  force  => true,
+  owner  => 'ubuntu',
+  group  => 'ubuntu',
 }
 
-# Update Nginx configuration
-file { '/etc/nginx/sites-available/default':
-  ensure  => 'file',
-  content => "location /hbnb_static {\n\talias /data/web_static/current/;\n}\n",
-  owner   => 'root',
-  group   => 'root',
+# Use sed to modify Nginx configuration
+exec { 'update_nginx_config':
+  command => "sed -i 's#server_name _;#server_name _;\\n\\tlocation /hbnb_static {\\n\\t\\talias /data/web_static/current/;\\n\\t}\\n#' /etc/nginx/sites-available/default",
+  path    => '/usr/bin',
+  require => Package['nginx'],
 }
 
-# Restart Nginx
+# Restart Nginx service
 service { 'nginx':
-  ensure    => 'running',
-  enable    => true,
-  subscribe => File['/etc/nginx/sites-available/default'],
+  ensure  => 'running',
+  enable  => true,
+  require => Exec['update_nginx_config'],
 }
