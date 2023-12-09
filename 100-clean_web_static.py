@@ -3,13 +3,15 @@
 Fabric script that deletes out-of-date archives.
 """
 
-from fabric.api import run, local, env
+from fabric.api import run, local, env, task
 from datetime import datetime
 
 env.hosts = ['35.153.33.61', '54.165.26.200']
 env.user = 'ubuntu'  # Update with your username
 env.key_filename = '~/.ssh/id_rsa'  # Update with your private key path
 
+
+@task
 def do_clean(number=0):
     """
     Deletes out-of-date archives.
@@ -36,10 +38,14 @@ def do_clean(number=0):
     # Remove the "total" line from the local ls output
     local("ls -ltr versions | grep -v '^total'")
 
-if __name__ == "__main__":
-    current_time = datetime.utcnow()
-    archive_name = "web_static_{}.tgz".format(current_time.strftime("%Y%m%d%H%M%S"))
-    archive_path = "versions/{}".format(archive_name)
-    local("tar -cvzf {} web_static".format(archive_path))
-    do_clean(2)
 
+# Run the clean if the script is executed directly
+if __name__ == "__main__":
+    from argparse import ArgumentParser
+
+    parser = ArgumentParser(description="Delete out-of-date archives.")
+    parser.add_argument("number", type=int, help="Number of archives to keep. Default is 0.")
+
+    args = parser.parse_args()
+    # Call the do_clean task with the specified number of archives to keep
+    do_clean(args.number)
