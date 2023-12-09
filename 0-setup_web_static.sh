@@ -14,7 +14,7 @@ sudo mkdir -p /data/web_static/shared/
 sudo touch /data/web_static/releases/test/index.html
 
 # Create a fake HTML file for testing
-echo -e "<html>\n\t<head>\n\t</head>\n\t<body>\n\t\tHolberton School\n\t</body>\n</html>" | sudo tee /data/web_static/releases/test/index.html > /dev/null
+echo -e "<html>\n  <head>\n  </head>\n  <body>\n    Holberton School\n  </body>\n</html>" | sudo tee /data/web_static/releases/test/index.html > /dev/null
 
 # Create or recreate symbolic link
 sudo rm -f /data/web_static/current
