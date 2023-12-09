@@ -1,4 +1,4 @@
-# puppet/manifests/init.pp
+# Puppet manifest to set up web servers for deployment of web_static
 
 # Install Nginx
 class { 'nginx':
@@ -6,36 +6,34 @@ class { 'nginx':
 }
 
 # Create necessary folders
-file { ['/data/web_static/releases/test/', '/data/web_static/shared/']:
+file { ['/data/', '/data/web_static/', '/data/web_static/releases/', '/data/web_static/shared/']:
   ensure => 'directory',
+  owner  => 'ubuntu',
+  group  => 'ubuntu',
 }
 
 # Create a fake HTML file for testing
 file { '/data/web_static/releases/test/index.html':
   ensure  => 'file',
   content => '<html>\n\t<head>\n\t</head>\n\t<body>\n\t\tHolberton School\n\t</body>\n</html>',
-  require => File['/data/web_static/releases/test/'],
+  owner   => 'ubuntu',
+  group   => 'ubuntu',
 }
 
 # Create symbolic link
 file { '/data/web_static/current':
-  ensure => 'link',
-  target => '/data/web_static/releases/test/',
-}
-
-# Give ownership of the /data/ folder to the ubuntu user and group recursively
-file { '/data/':
-  ensure  => 'directory',
+  ensure  => 'link',
+  target  => '/data/web_static/releases/test/',
   owner   => 'ubuntu',
   group   => 'ubuntu',
-  recurse => true,
 }
 
 # Update Nginx configuration
 file { '/etc/nginx/sites-available/default':
-  ensure => 'file',
+  ensure  => 'file',
   content => "location /hbnb_static {\n\talias /data/web_static/current/;\n}\n",
-  notify => Service['nginx'],
+  owner   => 'root',
+  group   => 'root',
 }
 
 # Restart Nginx
