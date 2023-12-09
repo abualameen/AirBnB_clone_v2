@@ -3,15 +3,15 @@
 Fabric script that distributes an archive to your web servers.
 """
 
-from fabric.api import run, put, env
+from fabric.api import run, put, env, task
 from os.path import exists
-from datetime import datetime
 
+# Define the list of remote servers
 env.hosts = ['35.153.33.61', '54.165.26.200']
 env.user = 'ubuntu'  # Update with your username
 env.key_filename = '~/.ssh/id_rsa'  # Update with your private key path
 
-
+@task
 def do_deploy(archive_path):
     """
     Distributes an archive to your web servers.
@@ -61,11 +61,14 @@ def do_deploy(archive_path):
         print(e)
         return False
 
-
+# Run the deployment if the script is executed directly
 if __name__ == "__main__":
-    current_time = datetime.utcnow()
-    archive_name = "web_static_{}.tgz".format(
-                    current_time.strftime("%Y%m%d%H%M%S"))
-    archive_path = "versions/{}".format(archive_name)
-    result = do_deploy(archive_path)
+    from argparse import ArgumentParser
+
+    parser = ArgumentParser(description="Deploy a web_static archive.")
+    parser.add_argument("archive_path", help="Path to the archive to deploy.")
+
+    args = parser.parse_args()
+    # Call the do_deploy task with the specified archive path
+    result = do_deploy(args.archive_path)
     print(result)
