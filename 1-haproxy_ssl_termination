@@ -23,7 +23,6 @@ DOMAIN='www.yaqscotech.tech' sudo -E bash -c 'cat /etc/letsencrypt/live/$DOMAIN/
 
 # Change the mode of the private key file
 sudo chmod -R go-rwx /etc/haproxy/certs
-hostname=$(hostname)
 
 # Configure HAProxy for SSL termination
 frontend_config="\
@@ -40,7 +39,6 @@ backend my_backend\n\
         balance roundrobin\n\
         server web-server-1 $WEB_SERVER_1_IP:$WEB_SERVER_1_PORT check\n\
         server web-server-2 $WEB_SERVER_2_IP:$WEB_SERVER_2_PORT check\n\
-	http-response set-header X-Served-By $hostname\n\
 "
 echo -e "\n$frontend_config\n$backend_config" | sudo tee -a /etc/haproxy/haproxy.cfg > /dev/null
 sudo haproxy -c -f /etc/haproxy/haproxy.cfg
