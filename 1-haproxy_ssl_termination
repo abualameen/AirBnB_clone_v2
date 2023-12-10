@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#this script configure haproxy and add ssl certificate
 
 SUBDOMAIN="www.yaqscotech.tech"
 WEB_SERVER_1_IP="35.153.33.61"
