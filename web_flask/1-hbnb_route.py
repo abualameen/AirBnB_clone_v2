@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 """
-This script starts a Flask web application to respond with "Hello HBNB!".
+This script starts a Flask web application with two routes:
+- Root (/): displays "Hello HBNB!"
+- /hbnb: displays "HBNB"
 """
 
 from flask import Flask
@@ -12,6 +14,7 @@ app = Flask(__name__)
 def hello_hbnb():
     """Display 'Hello HBNB!' when the root URL is accessed."""
     return 'Hello HBNB!'
+
 
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
