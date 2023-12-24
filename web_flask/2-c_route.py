@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 """
-This script starts a Flask web application with two routes:
+This script starts a Flask web application with three routes:
 - Root (/): displays "Hello HBNB!"
 - /hbnb: displays "HBNB"
+- /c/<text>: displays "C " followed by the value of the text variable
 """
 
-from flask import Flask
+from flask import Flask, escape
 
 app = Flask(__name__)
 
@@ -20,6 +21,12 @@ def hello_hbnb():
 def hbnb():
     """Display 'HBNB' when /hbnb URL is accessed."""
     return 'HBNB'
+
+
+@app.route('/c/<text>', strict_slashes=False)
+def c_text(text):
+    """Display 'C ' followed by the value of the text variable."""
+    return 'C {}'.format(escape(text).replace('_', ' '))
 
 
 if __name__ == '__main__':
