@@ -3,7 +3,7 @@
 This script starts a Flask web application with three routes:
 - Root (/): displays "Hello HBNB!"
 - /hbnb: displays "HBNB"
-- /c/<text>: displays "C " followed by the value of the text variable
+- /c/<text>: displays "C " followed by the value of the text variable, replacing underscores with spaces
 """
 
 from flask import Flask, escape
@@ -18,13 +18,13 @@ def hello_hbnb():
 
 
 @app.route('/hbnb', strict_slashes=False)
-def hbnb():
+def display_hbnb():
     """Display 'HBNB' when /hbnb URL is accessed."""
     return 'HBNB'
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def c_text(text):
+def display_c_text(text):
     """Display 'C ' followed by the value of the text variable."""
     return 'C {}'.format(escape(text).replace('_', ' '))
 
