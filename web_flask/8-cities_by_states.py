@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+"""Flask web application to display a list of states."""
+
 # Import necessary modules
 from flask import Flask, render_template
 from models import storage
@@ -15,8 +18,10 @@ def cities_by_states():
     cities = storage.all(City).values()
     states = [state for state in states if isinstance(state, State)]
     cities = [city for city in cities if isinstance(city, City)]
-    return render_template('8-cities_by_states.html', states=states, cities=cities)
-
+    return render_template(
+                            '8-cities_by_states.html',
+                            states=states,
+                            cities=cities)
 
 
 @app.teardown_appcontext
