@@ -8,12 +8,6 @@ from models.city import City
 app = Flask(__name__)
 
 
-@app.teardown_appcontext
-def teardown_db(exception):
-    """Close the current SQLAlchemy session."""
-    storage.close()
-
-
 @app.route('/cities_by_states', strict_slashes=False)
 def cities_by_states():
     """Display states and cities."""
@@ -22,6 +16,13 @@ def cities_by_states():
     states = [state for state in states if isinstance(state, State)]
     cities = [city for city in cities if isinstance(city, City)]
     return render_template('8-cities_by_states.html', states=states, cities=cities)
+
+
+
+@app.teardown_appcontext
+def teardown_db(exception):
+    """Close the current SQLAlchemy session."""
+    storage.close()
 
 
 if __name__ == "__main__":
