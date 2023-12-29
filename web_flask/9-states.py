@@ -33,9 +33,7 @@ def states_cities_list(id):
         if id == state.id:
             cities = state.cities
             return render_template('9-states.html', state=state, cities=cities)
-    
     return render_template('9-states.html', state=None)
-    
 
 
 if __name__ == '__main__':
