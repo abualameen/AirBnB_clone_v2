@@ -59,10 +59,7 @@ class DBStorage:
                     query_result = self.__session.query(cls).all()
                     for obj in query_result:
                         key = f"{type(obj).__name__}.{obj.id}"
-                        #obj_dict = obj.to_dict()
-                        # objects[key] = f"[{type(obj).__name__}]\
-                        #                 ({obj.id}) {obj_dict}"
-                        objects[key] = obj 
+                        objects[key] = obj
                 except Exception as e:
                     print(f"Error querying {cls}: {e}")
         return objects
