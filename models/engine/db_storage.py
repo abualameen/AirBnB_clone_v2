@@ -54,14 +54,15 @@ class DBStorage:
 
         objects = self.__objects
         for cls in classes:
-            if issubclass(cls, BaseModel):
+            if isinstance(cls, type) and issubclass(cls, BaseModel):
                 try:
                     query_result = self.__session.query(cls).all()
                     for obj in query_result:
                         key = f"{type(obj).__name__}.{obj.id}"
-                        obj_dict = obj.to_dict()
-                        objects[key] = f"[{type(obj).__name__}]\
-                                        ({obj.id}) {obj_dict}"
+                        #obj_dict = obj.to_dict()
+                        # objects[key] = f"[{type(obj).__name__}]\
+                        #                 ({obj.id}) {obj_dict}"
+                        objects[key] = obj 
                 except Exception as e:
                     print(f"Error querying {cls}: {e}")
         return objects
@@ -112,3 +113,7 @@ class DBStorage:
                 self.save()
             except Exception as e:
                 pass
+
+    def close(self):
+        """Call remove() method on the private session attribute."""
+        self.__session.remove()
